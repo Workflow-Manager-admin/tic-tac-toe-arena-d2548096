@@ -1,10 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import logo from './logo.svg';
 import './App.css';
+
+// Figma JSON reference
+const FIGMA_JSON_PATH = 'attachment/figma_12.json';
 
 // PUBLIC_INTERFACE
 function App() {
   const [theme, setTheme] = useState('light');
+
+  const [figmaData, setFigmaData] = useState(null);
+
+  // Effect to load Figma data
+  useEffect(() => {
+    fetch(FIGMA_JSON_PATH)
+      .then(response => response.json())
+      .then(data => setFigmaData(data))
+      .catch(error => console.error('Error loading Figma data:', error));
+  }, []);
 
   // Effect to apply theme to document element
   useEffect(() => {
@@ -19,28 +31,23 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <button 
-          className="theme-toggle" 
-          onClick={toggleTheme}
-          aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
-        >
-          {theme === 'light' ? '🌙 Dark' : '☀️ Light'}
-        </button>
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <p>
-          Current theme: <strong>{theme}</strong>
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <div className="header">
+          <button 
+            className="theme-toggle" 
+            onClick={toggleTheme}
+            aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
+          >
+            {theme === 'light' ? '🌙 Dark' : '☀️ Light'}
+          </button>
+          <h1>Tic Tac Toe</h1>
+        </div>
+        <div className="game-container">
+          {figmaData && (
+            <div className="figma-loaded">
+              Game board will be rendered here using Figma data
+            </div>
+          )}
+        </div>
       </header>
     </div>
   );
